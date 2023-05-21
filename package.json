@@ -1,0 +1,23 @@
+{
+  "name": "express-server-example",
+  "version": "1.0.0",
+  "description": "A simple ExpressJS server in TypeScript with nodemon",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "start:dev": "nodemon --watch src -e ts --exec \"ts-node\" src/index.ts",
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-jwt": "^8.4.0",
+    "jwks-rsa": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "nodemon": "^2.0.4",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.0.0"
+  }
+}
