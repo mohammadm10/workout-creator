@@ -1,7 +1,7 @@
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Select, MenuItem, FormControl, InputLabel, Button } from '@mui/material';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css'
 
 const darkTheme = createTheme({
@@ -24,8 +24,10 @@ function App() {
 
   const handleSubmit = () => {
     setIsLoading(true); // Start loading animation
-  
-    fetch('http://localhost:3001/')
+
+    const url = `http://localhost:3001/${muscleSelect}/${levelSelect}/${goalSelect}`;
+
+    fetch(url)
       .then((response) => response.json())
       .then((data) => {
         console.log(data); // Print the received data to the console
@@ -117,11 +119,27 @@ function App() {
         <div className=' py-7 flex justify-center'>
           <Button onClick={handleSubmit} variant="outlined">Create Exercise</Button>
         </div>
-        <div className=' flex justify-center py-10'>
-          <img className={`loading-image ${isLoading ? 'show' : 'hide'} lg:w-[300px] lg:h-[300px] md:w-[250px] md:h-[250px] sm:w-[200px] sm:h-[200px]`}
-            src="/muscle.png"
-            alt="Loading"
-          />
+        <div>
+            <div className=' flex justify-center'>
+              <img className={`loading-image ${isLoading ? 'show' : 'hide'} lg:w-[300px] lg:h-[300px] md:w-[250px] md:h-[250px] sm:w-[200px] sm:h-[200px]`}
+                src="/muscle.png"
+                alt="Loading"
+              />
+            </div>
+            {isLoading && (
+
+            <div className='flex justify-center'>
+              <div className="flex items-center justify-center py-10">
+                <p className="text-xl font-semibold">Loading</p>
+                <div className="ml-2 animate-pulse flex justify-between">
+                  <div className="w-3 h-3 bg-white rounded-full mr-1"></div>
+                  <div className="w-3 h-3 bg-white rounded-full mr-1"></div>
+                  <div className="w-3 h-3 bg-white rounded-full mr-1"></div>
+                  <div className="w-3 h-3 bg-white rounded-full mr-1"></div>
+                </div>
+              </div>
+            </div>
+            )}
         </div>
       </main>
     </ThemeProvider>
