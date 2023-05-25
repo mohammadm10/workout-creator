@@ -21,6 +21,7 @@ function App() {
   const [goalSelect, setGoalSelect] = useState('');
 
   const [isLoading, setIsLoading] = useState(false);
+  const [reply, setReply] = useState('');
 
   const handleSubmit = () => {
     setIsLoading(true); // Start loading animation
@@ -32,6 +33,7 @@ function App() {
       .then((data) => {
         console.log(data); // Print the received data to the console
         setIsLoading(false); // Stop loading animation
+        setReply(data.message);
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -120,13 +122,21 @@ function App() {
           <Button onClick={handleSubmit} variant="outlined">Create Exercise</Button>
         </div>
         <div>
-            <div className=' flex justify-center'>
-              <img className={`loading-image ${isLoading ? 'show' : 'hide'} lg:w-[300px] lg:h-[300px] md:w-[250px] md:h-[250px] sm:w-[200px] sm:h-[200px]`}
+          {isLoading ? (
+            <div className='flex justify-center'>
+              <img
+                className=' animate-spin lg:w-[300px] lg:h-[300px] md:w-[250px] md:h-[250px] sm:w-[200px] sm:h-[200px]'
                 src="/muscle.png"
                 alt="Loading"
               />
             </div>
-            {isLoading && (
+          ) : (
+            <div className='font-serif px-10 flex justify-center text-center'>
+              <p>{reply}</p>
+            </div>
+          )}
+
+          {isLoading && (
 
             <div className='flex justify-center'>
               <div className="flex items-center justify-center py-10">
@@ -139,7 +149,7 @@ function App() {
                 </div>
               </div>
             </div>
-            )}
+          )}
         </div>
       </main>
     </ThemeProvider>
