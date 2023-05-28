@@ -14,7 +14,8 @@ app.get('/:muscleSelect/:levelSelect/:goalSelect', async (req: Request, res: Res
   const level = req.params.levelSelect;
   const goal = req.params.goalSelect;
   const prompt = `Please provide me 4-6 exercises to do at the gym in a numbered format given the following information: 
-                The muscle I want to train is ${muscleGroup}, my gym experience is ${level} and my fitness goal is ${goal}`;
+                The muscle I want to train is ${muscleGroup}, my gym experience is ${level} and my fitness goal is ${goal}.
+                Number exercises as follows: 1. , 2. , etc. Briefly describe each workout and provide 1 tip for each one`;
   const apiKey = config.apiKey
   const model = 'gpt-3.5-turbo';
 
