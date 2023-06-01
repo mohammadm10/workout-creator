@@ -14,12 +14,22 @@ export default function Form() {
     const [isLoading, setIsLoading] = useState(false);
     const [reply, setReply] = useState('');
 
+    const [workoutSelect, setWorkoutSelect] = useState('');
+
+    const handleSelectionSingle = () => {
+        setWorkoutSelect('single');
+    }
+
+    const handleSelectionWhole = () => {
+        setWorkoutSelect('whole');
+    }
+
     const isMobile = useMediaQuery("(max-width: 700px)");
 
     const handleSubmit = () => {
         setIsLoading(true); // Start loading animation
 
-        const url = `http://localhost:3001/${muscleSelect}/${levelSelect}/${goalSelect}`;
+        const url = `/api/${muscleSelect}/${levelSelect}/${goalSelect}`;
 
         fetch(url)
             .then((response) => response.json())
@@ -48,6 +58,14 @@ export default function Form() {
 
     return (
         <>
+        <div className=' flex justify-center'>
+          <div className=' py-10 mr-10'>
+            <Button style={{ width: '200px', height: '48px' }} onClick={handleSelectionSingle} variant="contained">Single Exercise</Button>
+          </div>
+          <div className=' py-10 ml-10'>
+            <Button style={{ width: '200px', height: '48px' }} onClick={handleSelectionWhole} variant="contained">Entire Workout Plan</Button>
+          </div>
+        </div>
             <div className={`font-serif px-10 flex ${isMobile ? 'flex-col' : 'justify-center'}`}>
                 <FormControl sx={{ m: 1, minWidth: 160, width: '100%' }}>
                     <InputLabel id="muscle-label">Muscle</InputLabel>
@@ -118,7 +136,7 @@ export default function Form() {
 
                     <div className='flex justify-center'>
                         <div className="flex items-center justify-center py-10">
-                            <p className="text-xl font-semibold">Generating Exercises</p>
+                            <p className="text-xl font-semibold">Loading</p>
                             <div className="ml-2 animate-pulse flex justify-between">
                                 <div className="w-3 h-3 bg-white rounded-full mr-1"></div>
                                 <div className="w-3 h-3 bg-white rounded-full mr-1"></div>
