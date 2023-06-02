@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Select, MenuItem, FormControl, InputLabel, Button, useMediaQuery } from '@mui/material';
+import showError from './swal';
 
 export default function Form() {
 
@@ -16,22 +17,35 @@ export default function Form() {
 
     const isMobile = useMediaQuery("(max-width: 700px)");
 
+    function checkFields() {
+        if (!muscleSelect || !levelSelect || !goalSelect) {
+            return 0;
+        }
+        return 1;
+    }
+
     const handleSubmit = () => {
-        setIsLoading(true); // Start loading animation
+        let check = checkFields();
 
-        const url = `/api/${muscleSelect}/${levelSelect}/${goalSelect}`;
+        if (check === 0) {
+            showError();
+        } else {
+            setIsLoading(true); // Start loading animation
 
-        fetch(url)
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data); // Print the received data to the console
-                setIsLoading(false); // Stop loading animation
-                setReply(data.message);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                setIsLoading(false); // Stop loading animation
-            });
+            const url = `/api/${muscleSelect}/${levelSelect}/${goalSelect}`;
+
+            fetch(url)
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data); // Print the received data to the console
+                    setIsLoading(false); // Stop loading animation
+                    setReply(data.message);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    setIsLoading(false); // Stop loading animation
+                });
+        }
     };
 
     const handleMuscleSelect = (event) => {

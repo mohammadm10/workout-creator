@@ -20,7 +20,8 @@
     "prop-types": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "react-material-ui-carousel": "^3.4.2"
+    "react-material-ui-carousel": "^3.4.2",
+    "sweetalert2": "^11.7.10"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.14",
