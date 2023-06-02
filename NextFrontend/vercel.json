@@ -1,6 +1,8 @@
 {
     "functions": {
-      "api/[muscleSelect]/[levelSelect]/[goalSelect].js": {}
+      "api/[muscleSelect]/[levelSelect]/[goalSelect].js": {
+        "runtime": "nodejs12"
+      }
     }
   }
   
