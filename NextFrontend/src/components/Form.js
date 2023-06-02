@@ -3,7 +3,7 @@ import { Select, MenuItem, FormControl, InputLabel, Button, useMediaQuery } from
 
 export default function Form() {
 
-    const muscle = ['Chest', 'Back', 'Shoulders', 'Legs', 'Biceps', 'Triceps', 'Rear Delts', 'Traps', 'Front Delts', 'Side Delts', 'Quads', 'Hamstrings', 'Calves'];
+    const muscle = ['Chest', 'Back', 'Shoulders', 'Legs', 'Biceps', 'Triceps', 'Rear Delts', 'Traps', 'Front Delts', 'Side Delts', 'Quads', 'Hamstrings', 'Calves', 'Abs'];
     const level = ['Beginner', 'Intermediate', 'Advanced'];
     const goals = ['Weightloss', 'Maintain', 'Build Muscle'];
 
@@ -13,16 +13,6 @@ export default function Form() {
 
     const [isLoading, setIsLoading] = useState(false);
     const [reply, setReply] = useState('');
-
-    const [workoutSelect, setWorkoutSelect] = useState('');
-
-    const handleSelectionSingle = () => {
-        setWorkoutSelect('single');
-    }
-
-    const handleSelectionWhole = () => {
-        setWorkoutSelect('whole');
-    }
 
     const isMobile = useMediaQuery("(max-width: 700px)");
 
@@ -58,15 +48,7 @@ export default function Form() {
 
     return (
         <>
-        <div className=' flex justify-center'>
-          <div className=' py-10 mr-10'>
-            <Button style={{ width: '200px', height: '48px' }} onClick={handleSelectionSingle} variant="contained">Single Exercise</Button>
-          </div>
-          <div className=' py-10 ml-10'>
-            <Button style={{ width: '200px', height: '48px' }} onClick={handleSelectionWhole} variant="contained">Entire Workout Plan</Button>
-          </div>
-        </div>
-            <div className={`font-serif px-10 flex ${isMobile ? 'flex-col' : 'justify-center'}`}>
+            <div className={`font-serif px-10 flex py-5 ${isMobile ? 'flex-col' : 'justify-center'}`}>
                 <FormControl sx={{ m: 1, minWidth: 160, width: '100%' }}>
                     <InputLabel id="muscle-label">Muscle</InputLabel>
                     <Select
@@ -115,7 +97,7 @@ export default function Form() {
                 </FormControl>
             </div>
             <div className=' py-7 flex justify-center'>
-                <Button onClick={handleSubmit} variant="outlined">Create Exercise</Button>
+                <Button style={{ width: '200px', height: '48px' }} onClick={handleSubmit} variant="outlined">Create Exercise</Button>
             </div>
             <div>
                 {isLoading ? (
@@ -128,7 +110,7 @@ export default function Form() {
                     </div>
                 ) : (
                     <div className='font-serif px-10 flex justify-center text-center'>
-                        <div className='w-[70%] py-5' style={{ whiteSpace: 'pre-wrap' }}>{reply}</div>
+                        <div className={`py-5 ${isMobile ? 'w-[100%]' : 'w-[75%]'}`} style={{ whiteSpace: 'pre-wrap' }}>{reply}</div>
                     </div>
                 )}
 
