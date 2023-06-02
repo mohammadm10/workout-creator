@@ -24,7 +24,7 @@ export default function Form() {
         return 1;
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         let check = checkFields();
 
         if (check === 0) {

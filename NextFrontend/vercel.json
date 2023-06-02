@@ -1,0 +1,10 @@
+{
+    "functions": {
+      "/pages/api/[muscleSelect]/[levelSelect]/[goalSelect].js": {
+        "edge": {
+          "includeFiles": "/pages/api/[muscleSelect]/[levelSelect]/[goalSelect].js"
+        }
+      }
+    }
+  }
+  
