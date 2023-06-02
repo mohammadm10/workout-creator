@@ -32,7 +32,7 @@ export default async function handler(req, res) {
             res.status(500).json({ error: 'Unexpected response from OpenAI API' });
         }
     } catch (error) {
+        res.status(500).json({ error: 'Error ocurred: ' });
         console.error(error);
-        res.status(500).json({ error: 'An error occurred' });
     }
 }
