@@ -24,9 +24,6 @@ export default async function handler(req, res) {
 
         if (data.choices && data.choices.length > 0) {
             const message = data.choices[0].message.content.trim();
-            console.log(message);
-            
-            res.setHeader('Content-Type', 'application/json');
             res.status(200).json({ message });
         } else {
             res.status(500).json({ error: 'Unexpected response from OpenAI API' });
