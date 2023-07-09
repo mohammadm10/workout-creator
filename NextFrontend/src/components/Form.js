@@ -37,8 +37,8 @@ export default function Form() {
             if(workout != ''){
     
                 const current = {
-                    title: workout.split(". ")[1].split(': ')[0],
-                    description: workout.split(". ")[1].split(': ')[1],
+                    title: workout.split(". ")[1].split(descriptionSeperator)[0],
+                    description: workout.split(". ")[1].split(descriptionSeperator)[1],
                     tip: workout.split("Tip: ")[1]
                 }
             
@@ -63,6 +63,7 @@ export default function Form() {
     const isMobile = useMediaQuery("(max-width: 700px)");
 
     const handleSubmit = () => {
+        
         setIsLoading(true); // Start loading animation
 
         const url = `/api/${muscleSelect}/${levelSelect}/${goalSelect}`;
@@ -78,8 +79,6 @@ export default function Form() {
                 console.error('Error:', error);
                 setIsLoading(false); // Stop loading animation
             });
-
-        setIsLoading(false);
     };
 
     const handleMuscleSelect = (event) => {
