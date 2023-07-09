@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Select, MenuItem, FormControl, InputLabel, Button, useMediaQuery } from '@mui/material';
-import showError from './swal';
+import React, { useEffect, useState } from 'react';
+import { Select, MenuItem, FormControl, InputLabel, Button, useMediaQuery, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, Typography, Container } from '@mui/material';
+// import { checkFormat, createWorkoutList } from './FormatResponse';
 
 export default function Form() {
 
-    const muscle = ['Chest', 'Back', 'Shoulders', 'Legs', 'Biceps', 'Triceps', 'Rear Delts', 'Traps', 'Front Delts', 'Side Delts', 'Quads', 'Hamstrings', 'Calves', 'Abs'];
+    const muscle = ['Chest', 'Back', 'Shoulders', 'Legs', 'Biceps', 'Triceps', 'Rear Delts', 'Traps', 'Front Delts', 'Side Delts', 'Quads', 'Hamstrings', 'Calves'];
     const level = ['Beginner', 'Intermediate', 'Advanced'];
     const goals = ['Weightloss', 'Maintain', 'Build Muscle'];
 
@@ -14,38 +14,72 @@ export default function Form() {
 
     const [isLoading, setIsLoading] = useState(false);
     const [reply, setReply] = useState('');
+    const [formattedReply, setFormattedReply] = useState([]);
+
+    function checkFormat(text) {
+        console.log('Checking format...');
+        console.log(text);
+        const pattern = /^(\d+\.\s[A-Z][a-z]+(\s[A-Z][a-z]+)*(\s-\s|:\s).+(\n)?\s+Tip:.+(\n)*)+$/gm;
+        return pattern.test(text);
+    }
+    
+    function createWorkoutList(text) {
+        console.log('In create workout list');
+        console.log(text);
+        const workouts = text.split("\n");
+        const workoutObjs= []
+    
+        const descriptionSeperator = text.split(". Tip")[0].includes(":") ? ":" : "-";
+    
+        for(const workout of workouts){
+            console.log(workout);
+
+            if(workout != ''){
+    
+                const current = {
+                    title: workout.split(". ")[1].split(': ')[0],
+                    description: workout.split(". ")[1].split(': ')[1],
+                    tip: workout.split("Tip: ")[1]
+                }
+            
+                workoutObjs.push(current)
+            }
+        }
+        return workoutObjs;
+    }
+
+    useEffect(() => {
+        if(!reply){
+            console.log("No reply yet");
+            return;
+        };
+        console.log("checkFormat(reply)", checkFormat(reply));
+        const workout_objs = checkFormat(reply) ? createWorkoutList(reply) : [];
+        setFormattedReply(workout_objs);
+        console.log(workout_objs)
+        createWorkoutList(reply)
+    }, [reply])
 
     const isMobile = useMediaQuery("(max-width: 700px)");
 
-    function checkFields() {
-        if (!muscleSelect || !levelSelect || !goalSelect) {
-            return 0;
-        }
-        return 1;
-    }
+    const handleSubmit = () => {
+        setIsLoading(true); // Start loading animation
 
-    const handleSubmit = async () => {
-        let check = checkFields();
+        const url = `/api/${muscleSelect}/${levelSelect}/${goalSelect}`;
 
-        if (check === 0) {
-            showError();
-        } else {
-            setIsLoading(true); // Start loading animation
+        fetch(url)
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data); // Print the received data to the console
+                setIsLoading(false); // Stop loading animation
+                setReply(data.message);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                setIsLoading(false); // Stop loading animation
+            });
 
-            const url = `/api/${muscleSelect}/${levelSelect}/${goalSelect}`;
-
-            fetch(url)
-                .then((response) => response.json())
-                .then((data) => {
-                    console.log(data); // Print the received data to the console
-                    setIsLoading(false); // Stop loading animation
-                    setReply(data.message);
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                    setIsLoading(false); // Stop loading animation
-                });
-        }
+        setIsLoading(false);
     };
 
     const handleMuscleSelect = (event) => {
@@ -60,9 +94,11 @@ export default function Form() {
         setGoalSelect(event.target.value);
     }
 
+    
+
     return (
         <>
-            <div className={`font-serif px-10 flex py-5 ${isMobile ? 'flex-col' : 'justify-center'}`}>
+            <div className={`font-serif px-10 flex ${isMobile ? 'flex-col' : 'justify-center'}`}>
                 <FormControl sx={{ m: 1, minWidth: 160, width: '100%' }}>
                     <InputLabel id="muscle-label">Muscle</InputLabel>
                     <Select
@@ -111,7 +147,7 @@ export default function Form() {
                 </FormControl>
             </div>
             <div className=' py-7 flex justify-center'>
-                <Button style={{ width: '200px', height: '48px' }} onClick={handleSubmit} variant="outlined">Create Exercise</Button>
+                <Button onClick={handleSubmit} variant="outlined">Create Exercise</Button>
             </div>
             <div>
                 {isLoading ? (
@@ -122,9 +158,40 @@ export default function Form() {
                             alt="Loading"
                         />
                     </div>
-                ) : (
+                ) : !reply ? <></>
+                    :(
                     <div className='font-serif px-10 flex justify-center text-center'>
-                        <div className={`py-5 ${isMobile ? 'w-[100%]' : 'w-[75%]'}`} style={{ whiteSpace: 'pre-wrap' }}>{reply}</div>
+                        {formattedReply ? 
+                            // create simple table to display the workout
+                            // use material ui table for this with headers workout, sets, reps, tip
+                            <Container maxWidth="lg">
+                                <TableContainer sx={{minWidth: 450}} component={Paper}>
+                                    <Table sx={{width: "100%"}}>
+                                        <TableHead>
+                                        <TableRow>
+                                            <TableCell className="font-bold">Workout</TableCell>
+                                            <TableCell align="right"className="font-bold">Description</TableCell>
+                                            <TableCell align="right"className="font-bold">Tip</TableCell>
+                                        </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                        {formattedReply.map((workout, index) => (
+                                            <TableRow
+                                            key={index}
+                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                            >
+                                                <TableCell><Typography variant="h6">{workout.title}</Typography></TableCell>
+                                                <TableCell align="right">{workout.description}</TableCell>
+                                                <TableCell align="right">{workout.tip}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </Container>
+                            :
+                            <div className='w-[70%] py-5' style={{ whiteSpace: 'pre-wrap' }}>{reply}</div>
+                        }
                     </div>
                 )}
 
