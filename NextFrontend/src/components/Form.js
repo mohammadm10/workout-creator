@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Select, MenuItem, FormControl, InputLabel, Button, useMediaQuery, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, Typography, Container } from '@mui/material';
-import e from 'cors';
 // import { checkFormat, createWorkoutList } from './FormatResponse';
 
 
