@@ -35,7 +35,7 @@ export default function Form() {
 
         for (const workout of workouts) {
             console.log(workout);
-
+            
             if (workout != '' && workout.includes(':')) {
 
                 const current = {
