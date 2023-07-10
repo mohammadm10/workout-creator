@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Select, MenuItem, FormControl, InputLabel, Button, useMediaQuery, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, Typography, Container } from '@mui/material';
+// import { checkFormat, createWorkoutList } from './FormatResponse';
+
 
 export default function Form() {
 
@@ -16,30 +18,39 @@ export default function Form() {
     const [formattedReply, setFormattedReply] = useState([]);
 
     function checkFormat(text) {
+        console.log('Checking format...');
+        console.log(text);
         const pattern = /^(\d+\.\s[A-Z][a-z]+(\s[A-Z][a-z]+)*(\s-\s|:\s).+(\n)?\s+Tip:.+(\n)*)+$/gm;
         return pattern.test(text);
     }
-    
+
     function createWorkoutList(text) {
+        console.log('In create workout list');
+        console.log(text);
         const workouts = text.split("\n");
-        const workoutObjs= []
-    
+        const workoutObjs = []
+
         const descriptionSeperator = text.split(". Tip")[0].includes(":") ? ":" : "-";
-    
-        for(const workout of workouts){
-    
-            const current = {
-                title: workout.split(". ")[1].split(` ${descriptionSeperator}`)[0],
-                description: workout.split(`${descriptionSeperator} `)[1].split(". Tip")[0],
-                tip: workout.split("Tip: ")[1]
+
+        for (const workout of workouts) {
+            console.log(workout);
+
+            if (workout != '') {
+
+                const current = {
+                    title: workout.split(". ")[1].split(descriptionSeperator)[0],
+                    description: workout.split(descriptionSeperator)[1].replace('Tip', ''),
+                    tip: workout.split("Tip: ")[1]
+                }
+
+                workoutObjs.push(current)
             }
-            workoutObjs.push(current)
         }
         return workoutObjs;
     }
 
     useEffect(() => {
-        if(!reply){
+        if (!reply) {
             console.log("No reply yet");
             return;
         };
@@ -47,11 +58,13 @@ export default function Form() {
         const workout_objs = checkFormat(reply) ? createWorkoutList(reply) : [];
         setFormattedReply(workout_objs);
         console.log(workout_objs)
+        createWorkoutList(reply)
     }, [reply])
 
     const isMobile = useMediaQuery("(max-width: 700px)");
 
     const handleSubmit = () => {
+
         setIsLoading(true); // Start loading animation
 
         const url = `/api/${muscleSelect}/${levelSelect}/${goalSelect}`;
@@ -80,9 +93,6 @@ export default function Form() {
     const handleGoalChange = (event) => {
         setGoalSelect(event.target.value);
     }
-
-    
-
     return (
         <>
             <div className={`font-serif px-10 flex ${isMobile ? 'flex-col' : 'justify-center'}`}>
@@ -146,47 +156,47 @@ export default function Form() {
                         />
                     </div>
                 ) : !reply ? <></>
-                    :(
-                    <div className='font-serif px-10 flex justify-center text-center'>
-                        {formattedReply ? 
-                            // create simple table to display the workout
-                            // use material ui table for this with headers workout, sets, reps, tip
-                            <Container maxWidth="lg">
-                                <TableContainer sx={{minWidth: 450}} component={Paper}>
-                                    <Table sx={{width: "100%"}}>
-                                        <TableHead>
-                                        <TableRow>
-                                            <TableCell className="font-bold">Workout</TableCell>
-                                            <TableCell align="right"className="font-bold">Description</TableCell>
-                                            <TableCell align="right"className="font-bold">Tip</TableCell>
-                                        </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                        {formattedReply.map((workout, index) => (
-                                            <TableRow
-                                            key={index}
-                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                            >
-                                                <TableCell><Typography variant="h6">{workout.title}</Typography></TableCell>
-                                                <TableCell align="right">{workout.description}</TableCell>
-                                                <TableCell align="right">{workout.tip}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                            </Container>
-                            :
-                            <div className='w-[70%] py-5' style={{ whiteSpace: 'pre-wrap' }}>{reply}</div>
-                        }
-                    </div>
-                )}
+                    : (
+                        <div className='font-serif px-10 flex justify-center text-center'>
+                            {formattedReply ?
+                                // create simple table to display the workout
+                                // use material ui table for this with headers workout, sets, reps, tip
+                                <Container maxWidth="lg">
+                                    <TableContainer sx={{ minWidth: 450 }} component={Paper}>
+                                        <Table sx={{ width: "100%" }}>
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell className="font-bold">Workout</TableCell>
+                                                    <TableCell align="left" className="font-bold">Description</TableCell>
+                                                    <TableCell align="left" className="font-bold">Tip</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {formattedReply.map((workout, index) => (
+                                                    <TableRow
+                                                        key={index}
+                                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                                    >
+                                                        <TableCell><Typography variant="h6">{workout.title}</Typography></TableCell>
+                                                        <TableCell align="left">{workout.description}</TableCell>
+                                                        <TableCell align="left">{workout.tip}</TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                </Container>
+                                :
+                                <div className='w-[70%] py-5' style={{ whiteSpace: 'pre-wrap' }}>{reply}</div>
+                            }
+                        </div>
+                    )}
 
                 {isLoading && (
 
                     <div className='flex justify-center'>
                         <div className="flex items-center justify-center py-10">
-                            <p className="text-xl font-semibold">Loading</p>
+                            <p className="text-xl font-semibold">Generating exercises</p>
                             <div className="ml-2 animate-pulse flex justify-between">
                                 <div className="w-3 h-3 bg-white rounded-full mr-1"></div>
                                 <div className="w-3 h-3 bg-white rounded-full mr-1"></div>
