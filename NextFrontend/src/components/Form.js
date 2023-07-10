@@ -30,7 +30,9 @@ export default function Form() {
         const workouts = text.split("\n");
         const workoutObjs = []
 
-        const descriptionSeperator = text.split(". Tip")[0].includes(":") ? ":" : "-";
+        // const descriptionSeperator = text.split(". Tip")[0].includes(":") ? ":" : "-";
+
+        const descriptionSeperator = ';'
 
         for (const workout of workouts) {
             console.log(workout);
