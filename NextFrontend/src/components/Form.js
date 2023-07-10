@@ -65,7 +65,7 @@ export default function Form() {
 
     const handleSubmit = () => {
 
-        //setIsLoading(true); // Start loading animation
+        setIsLoading(true); // Start loading animation
 
         const url = `/api/${muscleSelect}/${levelSelect}/${goalSelect}`;
 
@@ -73,12 +73,12 @@ export default function Form() {
             .then((response) => response.json())
             .then((data) => {
                 console.log(data); // Print the received data to the console
-                //setIsLoading(false); // Stop loading animation
+                setIsLoading(false); // Stop loading animation
                 setReply(data.message);
             })
             .catch((error) => {
                 console.error('Error:', error);
-                //setIsLoading(false); // Stop loading animation
+                setIsLoading(false); // Stop loading animation
             });
     };
 

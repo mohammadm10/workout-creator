@@ -6,7 +6,7 @@ export default async function handler(req, res) {
                 Also provide me the number of sets and reps (without the '-' character, use the word 'to' (ex: 8 to 10 reps)) to do for each exercise based off of my fitness goal and experience.
                 Number exercises as follows: 1. , 2. , etc. Briefly describe each workout and provide 1 tip for each one, in the form Tip: . For each workout, include
                 all text in a single paragraph. If you are using words like 'push-ups' with dashes, split them into to words 'push ups'`;
-    const model = 'gpt-3.5-turbo';
+    const model = 'gpt-3.5-turbo-16k';
     try {
         const response = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
