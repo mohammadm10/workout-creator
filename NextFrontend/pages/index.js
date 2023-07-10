@@ -1,10 +1,14 @@
 import React from 'react'
 import Form from '../src/components/Form'
+import { useMediaQuery } from '@mui/material';
 
 function index() {
+
+  const isMobile = useMediaQuery("(max-width: 700px)");
+
   return (
     <main>
-        <div>
+        <div >
           <h1 className=' lg:text-xl sm:text-md font-mono font-bold relative p-5'>
             <a href='https://mohammadm-portfolio.vercel.app/' target='_blank' rel='noopener noreferrer'>
               developedbyMoe
@@ -15,7 +19,7 @@ function index() {
           <h1>Welcome to your personal gym trainer!</h1>
         </div>
         <div className=' font-serif flex justify-center py-5 text-xl text-center'>
-          <h2>Please fill in the fields below and I will create your next exercise.</h2>
+          <h2>Please fill in the fields below and I will create you a workout routine.</h2>
         </div>
         <div>
           <Form/>
