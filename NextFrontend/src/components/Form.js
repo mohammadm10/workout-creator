@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Select, MenuItem, FormControl, InputLabel, Button, useMediaQuery, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, Typography, Container } from '@mui/material';
-import { checkFormat, createWorkoutList } from '../formatResponse';
 
 export default function Form() {
 
@@ -15,6 +14,29 @@ export default function Form() {
     const [isLoading, setIsLoading] = useState(false);
     const [reply, setReply] = useState('');
     const [formattedReply, setFormattedReply] = useState([]);
+
+    function checkFormat(text) {
+        const pattern = /^(\d+\.\s[A-Z][a-z]+(\s[A-Z][a-z]+)*(\s-\s|:\s).+(\n)?\s+Tip:.+(\n)*)+$/gm;
+        return pattern.test(text);
+    }
+    
+    function createWorkoutList(text) {
+        const workouts = text.split("\n");
+        const workoutObjs= []
+    
+        const descriptionSeperator = text.split(". Tip")[0].includes(":") ? ":" : "-";
+    
+        for(const workout of workouts){
+    
+            const current = {
+                title: workout.split(". ")[1].split(` ${descriptionSeperator}`)[0],
+                description: workout.split(`${descriptionSeperator} `)[1].split(". Tip")[0],
+                tip: workout.split("Tip: ")[1]
+            }
+            workoutObjs.push(current)
+        }
+        return workoutObjs;
+    }
 
     useEffect(() => {
         if(!reply){
