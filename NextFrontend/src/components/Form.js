@@ -30,13 +30,11 @@ export default function Form() {
         const workouts = text.split("\n");
         const workoutObjs = []
 
-        // const descriptionSeperator = text.split(". Tip")[0].includes(":") ? ":" : "-";
-
-        const descriptionSeperator = ';'
+        const descriptionSeperator = text.split(". Tip")[0].includes(":") ? ":" : "-";
 
         for (const workout of workouts) {
             console.log(workout);
-            
+
             if (workout != '' && workout.includes(':')) {
 
                 const current = {
@@ -163,30 +161,31 @@ export default function Form() {
                             {formattedReply ?
                                 // create simple table to display the workout
                                 // use material ui table for this with headers workout, sets, reps, tip
-                                <div>
-                                    <Container maxWidth="lg">
-                                        <TableContainer component={Paper}>
-                                            <Table style={{ minWidth: isMobile ? '100%' : 450 }}>
-                                                <TableHead>
-                                                    <TableRow>
-                                                        <TableCell align="center" style={{ fontWeight: 'bold', fontSize: isMobile ? '16px' : 'inherit' }}>Workout</TableCell>
-                                                        <TableCell align="center" style={{ fontWeight: 'bold', fontSize: isMobile ? '16px' : 'inherit' }}>Description</TableCell>
-                                                        <TableCell align="center" style={{ fontWeight: 'bold', fontSize: isMobile ? '16px' : 'inherit' }}>Tip</TableCell>
+                                <Container maxWidth="lg">
+                                    <TableContainer sx={{ minWidth: 450 }} component={Paper}>
+                                        <Table sx={{ width: "100%" }}>
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell className="font-bold">Workout</TableCell>
+                                                    <TableCell align="right" className="font-bold">Description</TableCell>
+                                                    <TableCell align="right" className="font-bold">Tip</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {formattedReply.map((workout, index) => (
+                                                    <TableRow
+                                                        key={index}
+                                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                                    >
+                                                        <TableCell><Typography variant="h6">{workout.title}</Typography></TableCell>
+                                                        <TableCell align="right">{workout.description}</TableCell>
+                                                        <TableCell align="right">{workout.tip}</TableCell>
                                                     </TableRow>
-                                                </TableHead>
-                                                <TableBody>
-                                                    {formattedReply.map((workout, index) => (
-                                                        <TableRow key={index}>
-                                                            <TableCell align="left"><Typography variant={isMobile ? "body1" : "h6"}>{workout.title}</Typography></TableCell>
-                                                            <TableCell align="left">{workout.description}</TableCell>
-                                                            <TableCell align="left">{workout.tip}</TableCell>
-                                                        </TableRow>
-                                                    ))}
-                                                </TableBody>
-                                            </Table>
-                                        </TableContainer>
-                                    </Container>
-                                </div>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                </Container>
                                 :
                                 <div className='w-[70%] py-5' style={{ whiteSpace: 'pre-wrap' }}>{reply}</div>
                             }
